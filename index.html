@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Welcome To Fresh Teacher's Library, one stop center for academic needs of Ugandan schools. Our core mandate is to apply creativity and come up with innovative solutions in Ugandas' education sector.">
-    <meta name="keyword" content="Fresh Teacher's Library, www.freshteacheruganda.com, Schemes Of Work, Lesson Plans, Lesson Notes, Topical Questions, Luganda Translated Movies, Past Papers">
-    <meta name="author" content="Fresh Teacher">
-    <link rel="icon" type="image/png" sizes="16x16" href="logo.jpg">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-    <meta property="og:site_name" content="Fresh Teacher's Library" />
-    <meta property="og:image" content="https://2.bp.blogspot.com/-IEabwvLwNVY/XnccoVSvUgI/AAAAAAAAFro/mQPkBepUZpcNo1WG8trICTTg7unzwwXSgCK4BGAYYCw/s1600/SquareFit_20200322_064134.jpg" />
-   
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fun Math Quiz for Kids</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap" rel="stylesheet">
@@ -109,7 +99,8 @@ function initializeQuiz() {
         var question = randomQuestions[i];
         var questionElement = document.createElement('div');
         questionElement.className = 'question';
-        questionElement.innerHTML = '<h3>' + question.text + '</h3>' +
+        questionElement.innerHTML = '<h3>Question ' + (i + 1) + ' of ' + randomQuestions.length + ':</h3>' +
+                                     '<p>' + question.text + '</p>' +
                                      '<input type="number" class="form-control" id="q' + (i + 1) + '">' +
                                      '<button class="btn btn-primary btn-block" onclick="checkAnswer(' + question.answer + ',' + (i + 1) + ')">Next</button>';
         quizElement.appendChild(questionElement);
@@ -117,6 +108,7 @@ function initializeQuiz() {
     // Show the first question
     document.querySelector('.question').style.display = 'block';
 }
+
 
 
     // Call initializeQuiz to start the quiz
