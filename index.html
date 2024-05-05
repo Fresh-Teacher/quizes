@@ -70,13 +70,19 @@
                 <p id="score"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="repeatQuiz()">Repeat Quiz</button>
+                <a href="index.html" class="btn btn-secondary">Back to Homepage</a>
             </div>
         </div>
     </div>
 </div>
 
+
 <script>
+    function repeatQuiz() {
+    location.reload();
+}
+
     var currentQuestion = 1;
 
     function checkAnswer(correctAnswer) {
