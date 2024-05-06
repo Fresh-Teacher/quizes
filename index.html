@@ -73,20 +73,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <!-- Gear icons with different animations -->
-                <h5 class="modal-title" id="settingsModalLabel"><span class="gear-icon-left">⚙️</span> GAME SETTINGS <span class="gear-icon-right">⚙️</span></h5>
+                <h5 class="modal-title" id="settingsModalLabel"><span class="gear-icon-left">⚙️</span> Settings <span class="gear-icon-right">⚙️</span></h5>
             </div>
             <div class="modal-body">
                 <p>Please select your sound preference:</p>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="soundPreference" id="soundOn" value="on" checked>
                     <label class="form-check-label" for="soundOn">
-                        Sounds On 🔊
+                        Sounds On
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="soundPreference" id="soundOff" value="off">
                     <label class="form-check-label" for="soundOff">
-                        Sounds Off 🔇
+                        Sounds Off
                     </label>
                 </div>
             </div>
@@ -149,7 +149,16 @@
         var soundOn = document.getElementById('soundOn');
         soundPreference = soundOn.checked ? soundOn.value : 'off';
         $('#settingsModal').modal('hide');
+        if (soundPreference === 'on') {
+            playStartSound(); // Play start sound if sound preference is 'on'
+        }
         initializeQuiz();
+    }
+
+    // Function to play start sound
+    function playStartSound() {
+        var audio = new Audio('start.mp3');
+        audio.play();
     }
 
     // Function to select a random subset of questions
@@ -160,7 +169,7 @@
 
     // Function to initialize the quiz with random questions
     function initializeQuiz() {
-        if(soundPreference === ''){
+        if (soundPreference === '') {
             $('#settingsModal').modal('show');
             return;
         }
