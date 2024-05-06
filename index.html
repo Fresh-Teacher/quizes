@@ -60,7 +60,7 @@
 <body onload="$('#settingsModal').modal('show')">
 
 <div class="container">
-    <h1>Fun Math Quiz for Kids</h1>
+    <h1>Math Quiz</h1>
     
     <div id="quiz">
         <!-- Questions will be dynamically inserted here -->
@@ -73,20 +73,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <!-- Gear icons with different animations -->
-                <h5 class="modal-title" id="settingsModalLabel"><span class="gear-icon-left">⚙️</span> GAME SETTINGS <span class="gear-icon-right">⚙️</span></h5>
+                <h5 class="modal-title" id="settingsModalLabel"><span class="gear-icon-left">⚙️</span> Settings <span class="gear-icon-right">⚙️</span></h5>
             </div>
             <div class="modal-body">
                 <p>Please select your sound preference:</p>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="soundPreference" id="soundOn" value="on" checked>
                     <label class="form-check-label" for="soundOn">
-                        Sounds On 🔊
+                        Sounds On
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="soundPreference" id="soundOff" value="off">
                     <label class="form-check-label" for="soundOff">
-                        Sounds Off 🔇
+                        Sounds Off
                     </label>
                 </div>
             </div>
@@ -152,6 +152,12 @@
         initializeQuiz();
     }
 
+    // Function to play start sound
+    function playStartSound() {
+        var audio = new Audio('start.mp3');
+        audio.play();
+    }
+
     // Function to select a random subset of questions
     function selectRandomQuestions(numQuestions) {
         var shuffledQuestions = questions.sort(() => Math.random() - 0.5); // Shuffle the questions array
@@ -160,7 +166,7 @@
 
     // Function to initialize the quiz with random questions
     function initializeQuiz() {
-        if(soundPreference === ''){
+        if (soundPreference === '') {
             $('#settingsModal').modal('show');
             return;
         }
@@ -178,6 +184,9 @@
         }
         // Show the first question
         document.querySelector('.question').style.display = 'block';
+        if (soundPreference === 'on') {
+            playStartSound(); // Play start sound if sound preference is 'on'
+        }
     }
 
     var currentQuestion = 1;
@@ -221,18 +230,15 @@
         }
         
         var audioFile = '';
-if (score === 10) {
-    audioFile = 'omugezi.mp3'; // Play omugezi.mp3 for 10 marks
-} else if (score === 9) {
-    audioFile = 'my lord.mp3'; // Play my lord.mp3 for 9 marks
-} else if (score === 8) {
-    audioFile = 'kufa.mp3'; // Play kufa.mp3 for 8 marks
-} else if (score >= 3 && score <= 7) {
-    audioFile = 'kaweddemu.mp3'; // Play kaweddemu.mp3 for scores between 3 and 7 inclusive
-} else {
-    audioFile = 'charles.mp3'; // Play charles.mp3 for scores below 3
-}
-
+        if (score >= 8) {
+            audioFile = 'omugezi.mp3';
+        } else if (score >= 5) {
+            audioFile = 'my lord.mp3';
+        } else if (score >= 3) {
+            audioFile = 'kaweddemu.mp3';
+        } else {
+            audioFile = 'charles.mp3';
+        }
 
         // Play the appropriate audio if sound preference is on
         if (soundPreference === 'on') {
