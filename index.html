@@ -230,15 +230,18 @@
         }
         
         var audioFile = '';
-        if (score >= 8) {
-            audioFile = 'omugezi.mp3';
-        } else if (score >= 5) {
-            audioFile = 'my lord.mp3';
-        } else if (score >= 3) {
-            audioFile = 'kaweddemu.mp3';
-        } else {
-            audioFile = 'charles.mp3';
-        }
+if (score === 10) {
+    audioFile = 'omugezi.mp3'; // Play omugezi.mp3 for 10 marks
+} else if (score === 9) {
+    audioFile = 'my lord.mp3'; // Play my lord.mp3 for 9 marks
+} else if (score === 8) {
+    audioFile = 'kufa.mp3'; // Play kufa.mp3 for 8 marks
+} else if (score >= 3 && score <= 7) {
+    audioFile = 'kaweddemu.mp3'; // Play kaweddemu.mp3 for scores between 3 and 7 inclusive
+} else {
+    audioFile = 'charles.mp3'; // Play charles.mp3 for scores below 3
+}
+
 
         // Play the appropriate audio if sound preference is on
         if (soundPreference === 'on') {
