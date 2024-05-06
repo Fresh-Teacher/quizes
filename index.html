@@ -96,11 +96,31 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="saveSoundPreference()">Play</button>
+                <button type="button" class="btn btn-primary" onclick="saveSoundPreference()">START</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal for Incorrect Answer -->
+<div class="modal fade" id="incorrectModal" tabindex="-1" role="dialog" aria-labelledby="incorrectModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="incorrectModalLabel">Incorrect Answer</h5>
+            </div>
+            <div class="modal-body">
+                <p>Sorry, your answer is incorrect! The correct answer is: <span id="correctAnswer"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="nextQuestion()">NEXT QUESTION</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 
 <!-- Score Modal -->
@@ -223,27 +243,47 @@
     var currentQuestion = 1;
 
     function checkAnswer(correctAnswer, questionNumber) {
-        var userAnswer = parseInt(document.getElementById('q' + currentQuestion).value.trim());
-        if (isNaN(userAnswer)) {
-            alert("Please provide an answer.");
-            return;
-        }
-        
-        var isCorrect = userAnswer === correctAnswer;
-        if (isCorrect && soundPreference === 'on') {
-            speak("Correct");
-        } else if (!isCorrect && soundPreference === 'on') {
-            speak("Incorrect");
-        }
-        
-        document.querySelector('.question:nth-child(' + questionNumber + ')').style.display = 'none'; // Hide the current question
-        currentQuestion++;
-        if (currentQuestion <= 10) {
-            document.querySelector('.question:nth-child(' + currentQuestion + ')').style.display = 'block'; // Show the next question
-        } else {
-            calculateScore(); // Call calculateScore() when all questions are answered
-        }
+    var userAnswer = parseInt(document.getElementById('q' + currentQuestion).value.trim());
+    if (isNaN(userAnswer)) {
+        alert("Please provide an answer.");
+        return;
     }
+    
+    var isCorrect = userAnswer === correctAnswer;
+    if (isCorrect && soundPreference === 'on') {
+        speak("Correct");
+    } else if (!isCorrect && soundPreference === 'on') {
+        speak("Incorrect");
+        showIncorrectModal(correctAnswer); // Display modal for incorrect answer
+        return;
+    }
+    
+    document.querySelector('.question:nth-child(' + questionNumber + ')').style.display = 'none'; // Hide the current question
+    currentQuestion++;
+    if (currentQuestion <= 10) {
+        document.querySelector('.question:nth-child(' + currentQuestion + ')').style.display = 'block'; // Show the next question
+    } else {
+        calculateScore(); // Call calculateScore() when all questions are answered
+    }
+}
+
+function nextQuestion() {
+    $('#incorrectModal').modal('hide'); // Hide the incorrect answer modal
+    document.querySelector('.question:nth-child(' + currentQuestion + ')').style.display = 'none'; // Hide the current question
+    currentQuestion++;
+    if (currentQuestion <= 10) {
+        document.querySelector('.question:nth-child(' + currentQuestion + ')').style.display = 'block'; // Show the next question
+    } else {
+        calculateScore(); // Call calculateScore() when all questions are answered
+    }
+}
+
+
+function showIncorrectModal(correctAnswer) {
+    document.getElementById('correctAnswer').innerText = correctAnswer;
+    $('#incorrectModal').modal('show'); // Show the incorrect answer modal
+}
+
 
     function speak(text) {
         var utterance = new SpeechSynthesisUtterance(text);
