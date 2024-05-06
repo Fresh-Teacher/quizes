@@ -55,6 +55,15 @@
             display: inline-block;
             animation: rotateRight 2s infinite linear; /* Apply animation to rotate the gear icon to the right */
         }
+        .correct-answer {
+    color: red;
+}
+
+.red-score {
+    color: green;
+}
+
+
     </style>
 </head>
 <body onload="$('#settingsModal').modal('show')">
@@ -107,17 +116,18 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="incorrectModalLabel">Incorrect Answer</h5>
+                <h5 class="modal-title" id="incorrectModalLabel"> Solution Modal</h5>
             </div>
             <div class="modal-body">
-                <p>Sorry, your answer is incorrect! The correct answer is: <span id="correctAnswer"></span></p>
-            </div>
+                <p>Sorry, that's incorrect. The right answer is:<br><strong> <span id="correctAnswer" class="correct-answer"></span></p>
+            </div></strong>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="nextQuestion()">NEXT QUESTION</button>
             </div>
         </div>
     </div>
 </div>
+
 
 
 
@@ -327,8 +337,7 @@ function showIncorrectModal(correctAnswer) {
     "Fantastic job, " + playerName + "! You got " + score + " out of 10 correct. Perfect score? You make math look easy! 😉",
     "Impressive work, " + playerName + "! You got " + score + " out of 10 correct. A perfect score? You're a math whiz! 🎩",
     "Well done, " + playerName + "! You got " + score + " out of 10 correct. 10 out of 10! You're rocking this math quiz! 🚀",
-    "You're a math marvel, " + playerName + "! You got " + score + " out of 10 correct. Perfect score? Keep up the incredible effort! 💫",
-    "Spectacular, " + playerName + "! You got " + score + " out of 10 correct. A perfect score? You're in a league of your own! ⚡",
+    "Hey, " + playerName + ", you're killin' it! <span class='red-score'>" + score + "</span> out of 10. Keep it up! 😎",    "Spectacular, " + playerName + "! You got " + score + " out of 10 correct. A perfect score? You're in a league of your own! ⚡",
     "Hats off to you, " + playerName + "! You got " + score + " out of 10 correct. Perfect score? You're a math master! 🎓",
     "You're setting the bar high, " + playerName + "! You got " + score + " out of 10 correct. Perfect score? Keep up the awesome work! 🌟",
     "Excellent job, " + playerName + "! You got " + score + " out of 10 correct. A perfect score? You're a math legend! 🏅",
