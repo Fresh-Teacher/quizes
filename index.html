@@ -159,12 +159,31 @@
         saveSettings(); // Call saveSettings to set the player's name and other settings
     }
 
-    // Function to save settings including player's name
     function saveSettings() {
-        playerName = document.getElementById('playerName').value.trim();
-        $('#settingsModal').modal('hide');
-        initializeQuiz();
+    var playerNameInput = document.getElementById('playerName');
+    var playerName = playerNameInput.value.trim();
+
+    // Regular expression to validate the player name
+    var nameRegex = /^[a-zA-Z]+$/;
+
+    // Check if the player name is empty or contains invalid characters
+    if (playerName === '') {
+        alert('Please enter your name.');
+        return;
+    } else if (!nameRegex.test(playerName)) {
+        alert('Please enter a valid name (only letters allowed).');
+        return;
     }
+
+    // Continue with saving settings if the name is valid
+    var soundOn = document.getElementById('soundOn');
+    soundPreference = soundOn.checked ? soundOn.value : 'off';
+    $('#settingsModal').modal('hide');
+    initializeQuiz();
+}
+
+
+    
 
     // Function to play start sound
     function playStartSound() {
