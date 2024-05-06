@@ -161,7 +161,7 @@
 
     function saveSettings() {
     var playerNameInput = document.getElementById('playerName');
-    var playerName = playerNameInput.value.trim();
+    playerName = playerNameInput.value.trim(); // Update the global playerName variable
 
     // Regular expression to validate the player name
     var nameRegex = /^[a-zA-Z]+$/;
@@ -181,9 +181,7 @@
     $('#settingsModal').modal('hide');
     initializeQuiz();
 }
-
-
-    
+   
 
     // Function to play start sound
     function playStartSound() {
@@ -267,7 +265,7 @@
 
         if (score === 10) {
             audioFile = 'omugezi.mp3';
-            message = "Excellent! Well done, " + playerName + "! You got all 10 questions correct. Keep it up!";
+            message = "Excellent! Well done, " + playerName + "! You got all 10 questions correct. You're a genius!";
         } else if (score >= 8 && score < 10) {
             audioFile = 'my lord.mp3';
             message = "Great job, " + playerName + "! You got " + score + " out of 10 correct. Keep it up!";
