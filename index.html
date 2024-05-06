@@ -233,9 +233,9 @@
         
         var isCorrect = userAnswer === correctAnswer;
         if (isCorrect && soundPreference === 'on') {
-            speak("Yes");
+            speak("Correct");
         } else if (!isCorrect && soundPreference === 'on') {
-            speak("No");
+            speak("Wrong");
         }
         
         document.querySelector('.question:nth-child(' + questionNumber + ')').style.display = 'none'; // Hide the current question
