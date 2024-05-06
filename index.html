@@ -76,6 +76,11 @@
                 <h5 class="modal-title" id="settingsModalLabel"><span class="gear-icon-left">⚙️</span> GAME SETTINGS <span class="gear-icon-right">⚙️</span></h5>
             </div>
             <div class="modal-body">
+                <div class="form-group">
+                    <label for="playerName">Player Name 🦸</label>
+                    <input type="text" class="form-control" id="playerName" placeholder="Enter your name here...">
+                </div>
+
                 <p>Please select your sound preference:</p>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="soundPreference" id="soundOn" value="on" checked>
@@ -144,10 +149,19 @@
     // Variable to store sound preference
     var soundPreference = '';
 
+    // Variable to store player's name
+    var playerName = '';
+
     // Function to save sound preference
     function saveSoundPreference() {
         var soundOn = document.getElementById('soundOn');
         soundPreference = soundOn.checked ? soundOn.value : 'off';
+        saveSettings(); // Call saveSettings to set the player's name and other settings
+    }
+
+    // Function to save settings including player's name
+    function saveSettings() {
+        playerName = document.getElementById('playerName').value.trim();
         $('#settingsModal').modal('hide');
         initializeQuiz();
     }
@@ -230,18 +244,21 @@
         }
         
         var audioFile = '';
-if (score === 10) {
-    audioFile = 'omugezi.mp3'; // Play omugezi.mp3 for 10 marks
-} else if (score === 9) {
-    audioFile = 'my lord.mp3'; // Play my lord.mp3 for 9 marks
-} else if (score === 8) {
-    audioFile = 'kufa.mp3'; // Play kufa.mp3 for 8 marks
-} else if (score >= 3 && score <= 7) {
-    audioFile = 'kaweddemu.mp3'; // Play kaweddemu.mp3 for scores between 3 and 7 inclusive
-} else {
-    audioFile = 'charles.mp3'; // Play charles.mp3 for scores below 3
-}
+        var message = '';
 
+        if (score === 10) {
+            audioFile = 'omugezi.mp3';
+            message = "Excellent! Well done, " + playerName + "! You got all 10 questions correct. Keep it up!";
+        } else if (score >= 8 && score < 10) {
+            audioFile = 'my lord.mp3';
+            message = "Great job, " + playerName + "! You got " + score + " out of 10 correct. Keep it up!";
+        } else if (score >= 3 && score <= 7) {
+            audioFile = 'kaweddemu.mp3';
+            message = "Well done, " + playerName + "! You got " + score + " out of 10 correct. Keep practicing!";
+        } else {
+            audioFile = 'charles.mp3';
+            message = "Keep trying, " + playerName + "! You got " + score + " out of 10 correct. You can do better!";
+        }
 
         // Play the appropriate audio if sound preference is on
         if (soundPreference === 'on') {
@@ -249,7 +266,7 @@ if (score === 10) {
             audio.play();
         }
         
-        document.getElementById('score').innerText = "You got " + score + " out of 10 correct!"; // Update score text to reflect 10 questions
+        document.getElementById('score').innerText = message; // Display personalized message
         $('#scoreModal').modal('show');
     }
 
@@ -257,6 +274,7 @@ if (score === 10) {
         location.reload();
     }
 </script>
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
