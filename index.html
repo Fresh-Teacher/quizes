@@ -30,9 +30,34 @@
         #scoreModal .modal-dialog {
             max-width: 400px;
         }
+        /* CSS animation for gear icons */
+        @keyframes rotateRight {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes rotateLeft {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+        .gear-icon-left {
+            display: inline-block;
+            animation: rotateLeft 2s infinite linear; /* Apply animation to rotate the gear icon to the left */
+        }
+        .gear-icon-right {
+            display: inline-block;
+            animation: rotateRight 2s infinite linear; /* Apply animation to rotate the gear icon to the right */
+        }
     </style>
 </head>
-<body>
+<body onload="$('#settingsModal').modal('show')">
 
 <div class="container">
     <h1>Fun Math Quiz for Kids</h1>
@@ -41,6 +66,37 @@
         <!-- Questions will be dynamically inserted here -->
     </div>
 </div>
+
+<!-- Settings Modal -->
+<div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- Gear icons with different animations -->
+                <h5 class="modal-title" id="settingsModalLabel"><span class="gear-icon-left">⚙️</span> GAME SETTINGS <span class="gear-icon-right">⚙️</span></h5>
+            </div>
+            <div class="modal-body">
+                <p>Please select your sound preference:</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="soundPreference" id="soundOn" value="on" checked>
+                    <label class="form-check-label" for="soundOn">
+                        Sounds On 🔊
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="soundPreference" id="soundOff" value="off">
+                    <label class="form-check-label" for="soundOff">
+                        Sounds Off 🔇
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveSoundPreference()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Score Modal -->
 <div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -85,34 +141,44 @@
         { text: "What is 30 / 5?", answer: 6 }
     ];
 
+    // Variable to store sound preference
+    var soundPreference = '';
+
+    // Function to save sound preference
+    function saveSoundPreference() {
+        var soundOn = document.getElementById('soundOn');
+        soundPreference = soundOn.checked ? soundOn.value : 'off';
+        $('#settingsModal').modal('hide');
+        initializeQuiz();
+    }
+
     // Function to select a random subset of questions
     function selectRandomQuestions(numQuestions) {
         var shuffledQuestions = questions.sort(() => Math.random() - 0.5); // Shuffle the questions array
         return shuffledQuestions.slice(0, numQuestions);
     }
 
-// Function to initialize the quiz with random questions
-function initializeQuiz() {
-    var randomQuestions = selectRandomQuestions(10); // Select 10 random questions
-    var quizElement = document.getElementById('quiz');
-    for (var i = 0; i < randomQuestions.length; i++) {
-        var question = randomQuestions[i];
-        var questionElement = document.createElement('div');
-        questionElement.className = 'question';
-        questionElement.innerHTML = '<h3>Question ' + (i + 1) + ' of ' + randomQuestions.length + ':</h3>' +
-                                     '<p>' + question.text + '</p>' +
-                                     '<input type="number" class="form-control" id="q' + (i + 1) + '">' +
-                                     '<button class="btn btn-primary btn-block" onclick="checkAnswer(' + question.answer + ',' + (i + 1) + ')">Next</button>';
-        quizElement.appendChild(questionElement);
+    // Function to initialize the quiz with random questions
+    function initializeQuiz() {
+        if(soundPreference === ''){
+            $('#settingsModal').modal('show');
+            return;
+        }
+        var randomQuestions = selectRandomQuestions(10); // Select 10 random questions
+        var quizElement = document.getElementById('quiz');
+        for (var i = 0; i < randomQuestions.length; i++) {
+            var question = randomQuestions[i];
+            var questionElement = document.createElement('div');
+            questionElement.className = 'question';
+            questionElement.innerHTML = '<h3>Question ' + (i + 1) + ' of ' + randomQuestions.length + ':</h3>' +
+                                         '<p>' + question.text + '</p>' +
+                                         '<input type="number" class="form-control" id="q' + (i + 1) + '">' +
+                                         '<button class="btn btn-primary btn-block" onclick="checkAnswer(' + question.answer + ',' + (i + 1) + ')">Next</button>';
+            quizElement.appendChild(questionElement);
+        }
+        // Show the first question
+        document.querySelector('.question').style.display = 'block';
     }
-    // Show the first question
-    document.querySelector('.question').style.display = 'block';
-}
-
-
-
-    // Call initializeQuiz to start the quiz
-    initializeQuiz();
 
     var currentQuestion = 1;
 
@@ -124,9 +190,9 @@ function initializeQuiz() {
         }
         
         var isCorrect = userAnswer === correctAnswer;
-        if (isCorrect) {
+        if (isCorrect && soundPreference === 'on') {
             speak("Yes");
-        } else {
+        } else if (!isCorrect && soundPreference === 'on') {
             speak("No");
         }
         
@@ -145,35 +211,35 @@ function initializeQuiz() {
     }
 
     function calculateScore() {
-    var score = 0;
-    var totalQuestions = 10; // Update total questions to 10
-    for (var i = 1; i <= totalQuestions; i++) {
-        var userAnswer = parseInt(document.getElementById('q' + i).value);
-        if (!isNaN(userAnswer) && userAnswer === questions[i - 1].answer) {
-            score++;
+        var score = 0;
+        var totalQuestions = 10; // Update total questions to 10
+        for (var i = 1; i <= totalQuestions; i++) {
+            var userAnswer = parseInt(document.getElementById('q' + i).value);
+            if (!isNaN(userAnswer) && userAnswer === questions[i - 1].answer) {
+                score++;
+            }
         }
+        
+        var audioFile = '';
+        if (score >= 8) {
+            audioFile = 'omugezi.mp3';
+        } else if (score >= 5) {
+            audioFile = 'my lord.mp3';
+        } else if (score >= 3) {
+            audioFile = 'kaweddemu.mp3';
+        } else {
+            audioFile = 'charles.mp3';
+        }
+
+        // Play the appropriate audio if sound preference is on
+        if (soundPreference === 'on') {
+            var audio = new Audio(audioFile);
+            audio.play();
+        }
+        
+        document.getElementById('score').innerText = "You got " + score + " out of 10 correct!"; // Update score text to reflect 10 questions
+        $('#scoreModal').modal('show');
     }
-    
-    var audioFile = '';
-    if (score >= 8) {
-        audioFile = 'omugezi.mp3';
-    } else if (score >= 5) {
-        audioFile = 'my lord.mp3';
-    } else if (score >= 3) {
-        audioFile = 'kaweddemu.mp3';
-    } else {
-        audioFile = 'charles.mp3';
-    }
-
-    // Play the appropriate audio
-    var audio = new Audio(audioFile);
-    audio.play();
-    
-    document.getElementById('score').innerText = "You got " + score + " out of 10 correct!"; // Update score text to reflect 10 questions
-    $('#scoreModal').modal('show');
-}
-
-
 
     function repeatQuiz() {
         location.reload();
